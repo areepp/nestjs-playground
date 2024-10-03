@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  NotFoundException,
+  Param,
+  ParseUUIDPipe,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { CreateUserDto, GetUsersQuery } from './users.dto';
 import { UsersService } from './users.service';
 
@@ -15,8 +24,12 @@ export class UsersController {
   }
 
   @Get(':id')
-  findUser(@Param('id') id: string) {
-    return { data: this.usersService.findUser(id) };
+  async findUser(@Param('id', ParseUUIDPipe) id: string) {
+    try {
+      return { data: await this.usersService.findUser(id) };
+    } catch {
+      throw new NotFoundException();
+    }
   }
 
   @Post()

@@ -11,8 +11,11 @@ export class UsersService {
     return this.users;
   }
 
-  findUser(id: string): TUser | {} {
-    return this.users.find((user) => user.id === id) ?? {};
+  findUser(id: string): Promise<TUser> {
+    if (this.users.find((user) => user.id === id)) {
+      return Promise.resolve(this.users.find((user) => user.id === id));
+    }
+    throw new Error();
   }
 
   createUser(createUserDto: CreateUserDto) {

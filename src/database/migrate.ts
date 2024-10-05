@@ -6,6 +6,7 @@ import {
   Migrator,
   PostgresDialect,
   FileMigrationProvider,
+  NO_MIGRATIONS,
 } from 'kysely';
 import { config } from 'dotenv';
 import { ConfigService } from '@nestjs/config';

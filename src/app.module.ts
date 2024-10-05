@@ -1,12 +1,27 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UsersModule } from './modules/users/users.module';
-import { ConfigModule } from '@nestjs/config';
+import { UsersModule } from './features/users/users.module';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { validate } from './utils/env.validation';
+import { DatabaseModule } from './database/database.module';
 
 @Module({
-  imports: [UsersModule, ConfigModule.forRoot({ validate })],
+  imports: [
+    UsersModule,
+    ConfigModule.forRoot({ validate }),
+    DatabaseModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        host: configService.get('POSTGRES_HOST'),
+        port: configService.get('POSTGRES_PORT'),
+        user: configService.get('POSTGRES_USER'),
+        password: configService.get('POSTGRES_PASSWORD'),
+        database: configService.get('POSTGRES_DB'),
+      }),
+    }),
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

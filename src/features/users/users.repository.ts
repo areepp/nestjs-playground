@@ -10,11 +10,19 @@ export class UsersRepository {
     return this.database.selectFrom('users').selectAll().execute();
   }
 
-  async getWithId(id: number) {
+  async getOneWithId(id: number) {
     return this.database
       .selectFrom('users')
       .selectAll()
       .where('id', '=', id)
+      .executeTakeFirst();
+  }
+
+  async getOneWithEmail(email: string) {
+    return this.database
+      .selectFrom('users')
+      .selectAll()
+      .where('email', '=', email)
       .executeTakeFirst();
   }
 

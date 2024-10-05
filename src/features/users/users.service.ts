@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './users.dto';
 import { User } from './users.model';
 import { UsersRepository } from './users.repository';
@@ -12,16 +12,22 @@ export class UsersService {
     return this.usersRepository.getAll();
   }
 
-  async findUser(id: number) {
-    const response = await this.usersRepository.getWithId(id);
-    if (!response) throw new Error();
-    return { data: response };
+  async findUserById(id: number) {
+    const response = await this.usersRepository.getOneWithId(id);
+    if (!response) throw new NotFoundException();
+    return response;
+  }
+
+  async findUserByEmail(email: string) {
+    const response = await this.usersRepository.getOneWithEmail(email);
+    if (!response) throw new NotFoundException();
+    return response;
   }
 
   async createUser(createUserDto: CreateUserDto) {
     try {
-      const result = await this.usersRepository.create(createUserDto);
-      return { data: createUserDto };
+      await this.usersRepository.create(createUserDto);
+      return createUserDto;
     } catch {
       throw new Error();
     }

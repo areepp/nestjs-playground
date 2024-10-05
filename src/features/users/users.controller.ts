@@ -6,9 +6,8 @@ import {
   Param,
   ParseIntPipe,
   Post,
-  Query,
 } from '@nestjs/common';
-import { CreateUserDto, GetUsersQuery } from './users.dto';
+import { CreateUserDto } from './users.dto';
 import { UsersService } from './users.service';
 
 @Controller('users')
@@ -16,25 +15,28 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
-  async findAll(@Query() query: GetUsersQuery) {
+  async findAll() {
+    const data = await this.usersService.findAll();
     return {
-      data: await this.usersService.findAll(),
-      is_subscribed: query.is_subscribed,
+      data,
     };
   }
 
   @Get(':id')
   async findUser(@Param('id', ParseIntPipe) id: string) {
     try {
-      const response = await this.usersService.findUser(Number(id));
-      return response;
+      const data = await this.usersService.findUserById(Number(id));
+      return {
+        data,
+      };
     } catch {
       throw new NotFoundException();
     }
   }
 
   @Post()
-  createUser(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.createUser(createUserDto);
+  async createUser(@Body() createUserDto: CreateUserDto) {
+    const res = await this.usersService.createUser(createUserDto);
+    return { data: res };
   }
 }

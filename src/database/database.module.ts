@@ -1,7 +1,7 @@
 import { Global, Module } from '@nestjs/common';
 import { Pool } from 'pg';
 import { PostgresDialect } from 'kysely';
-import { Database } from './database.model';
+import { Database } from './database';
 import {
   ConfigurableModuleClass,
   DATABASE_OPTIONS,

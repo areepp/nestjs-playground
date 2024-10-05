@@ -4,7 +4,7 @@ import {
   Get,
   NotFoundException,
   Param,
-  ParseUUIDPipe,
+  ParseIntPipe,
   Post,
   Query,
 } from '@nestjs/common';
@@ -24,9 +24,9 @@ export class UsersController {
   }
 
   @Get(':id')
-  async findUser(@Param('id', ParseUUIDPipe) id: string) {
+  async findUser(@Param('id', ParseIntPipe) id: string) {
     try {
-      return { data: await this.usersService.findUser(id) };
+      return { data: await this.usersService.findUser(Number(id)) };
     } catch {
       throw new NotFoundException();
     }

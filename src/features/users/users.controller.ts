@@ -16,9 +16,9 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
-  findAll(@Query() query: GetUsersQuery) {
+  async findAll(@Query() query: GetUsersQuery) {
     return {
-      data: this.usersService.findAll(),
+      data: await this.usersService.findAll(),
       is_subscribed: query.is_subscribed,
     };
   }
@@ -26,7 +26,8 @@ export class UsersController {
   @Get(':id')
   async findUser(@Param('id', ParseIntPipe) id: string) {
     try {
-      return { data: await this.usersService.findUser(Number(id)) };
+      const response = await this.usersService.findUser(Number(id));
+      return response;
     } catch {
       throw new NotFoundException();
     }
@@ -34,7 +35,6 @@ export class UsersController {
 
   @Post()
   createUser(@Body() createUserDto: CreateUserDto) {
-    this.usersService.createUser(createUserDto);
-    return createUserDto;
+    return this.usersService.createUser(createUserDto);
   }
 }

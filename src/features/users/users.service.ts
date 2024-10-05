@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { v4 as uuidv4 } from 'uuid';
 import { CreateUserDto } from './users.dto';
 import { User } from './users.model';
 import { UsersRepository } from './users.repository';
@@ -13,17 +12,18 @@ export class UsersService {
     return this.usersRepository.getAll();
   }
 
-  findUser(id: number): Promise<User> {
-    if (this.users.find((user) => user.id === id)) {
-      return Promise.resolve(this.users.find((user) => user.id === id));
-    }
-    throw new Error();
+  async findUser(id: number) {
+    const response = await this.usersRepository.getWithId(id);
+    if (!response) throw new Error();
+    return { data: response };
   }
 
-  createUser(createUserDto: CreateUserDto) {
-    this.users.push({
-      id: uuidv4(),
-      ...createUserDto,
-    });
+  async createUser(createUserDto: CreateUserDto) {
+    try {
+      const result = await this.usersRepository.create(createUserDto);
+      return { data: createUserDto };
+    } catch {
+      throw new Error();
+    }
   }
 }

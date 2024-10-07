@@ -4,6 +4,7 @@ export interface UsersTable {
   id: Generated<number>;
   name: string;
   email: string;
+  password: string;
 }
 
 export type User = Selectable<UsersTable>;

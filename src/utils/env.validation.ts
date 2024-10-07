@@ -29,6 +29,9 @@ class EnvironmentVariables {
 
   @IsNumber()
   POSTGRES_PORT: number;
+
+  @IsString()
+  JWT_SECRET: string;
 }
 
 export function validate(config: Record<string, unknown>) {

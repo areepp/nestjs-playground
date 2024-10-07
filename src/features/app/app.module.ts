@@ -5,10 +5,14 @@ import { UsersModule } from '../users/users.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { validate } from '../../utils/env.validation';
 import { DatabaseModule } from '../../database/database.module';
+import { AuthModule } from '../auth/auth.module';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthGuard } from '../auth/passport-jwt.guard';
 
 @Module({
   imports: [
     UsersModule,
+    AuthModule,
     ConfigModule.forRoot({ validate }),
     DatabaseModule.forRootAsync({
       imports: [ConfigModule],
@@ -23,6 +27,6 @@ import { DatabaseModule } from '../../database/database.module';
     }),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, { provide: APP_GUARD, useClass: JwtAuthGuard }],
 })
 export class AppModule {}

@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateUserDto } from './users.dto';
 import { User } from './users.model';
 import { UsersRepository } from './users.repository';
@@ -8,7 +13,7 @@ export class UsersService {
   private readonly users: User[] = [];
   constructor(private readonly usersRepository: UsersRepository) {}
 
-  findAll(): Promise<User[]> {
+  async findAll() {
     return this.usersRepository.getAll();
   }
 
@@ -26,9 +31,18 @@ export class UsersService {
 
   async createUser(createUserDto: CreateUserDto) {
     try {
-      await this.usersRepository.create(createUserDto);
-      return createUserDto;
-    } catch {
+      const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
+      await this.usersRepository.create({
+        email: createUserDto.email,
+        name: createUserDto.name,
+        password: hashedPassword,
+      });
+      const { password, ...rest } = createUserDto;
+      return { ...rest };
+    } catch (error) {
+      if (error.code == 23505) {
+        throw new ConflictException('Email already exists');
+      }
       throw new Error();
     }
   }

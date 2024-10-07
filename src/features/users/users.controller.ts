@@ -1,13 +1,10 @@
 import {
-  Body,
   Controller,
   Get,
   NotFoundException,
   Param,
   ParseIntPipe,
-  Post,
 } from '@nestjs/common';
-import { CreateUserDto } from './users.dto';
 import { UsersService } from './users.service';
 
 @Controller('users')
@@ -32,11 +29,5 @@ export class UsersController {
     } catch {
       throw new NotFoundException();
     }
-  }
-
-  @Post()
-  async createUser(@Body() createUserDto: CreateUserDto) {
-    const res = await this.usersService.createUser(createUserDto);
-    return { data: res };
   }
 }

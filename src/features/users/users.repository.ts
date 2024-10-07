@@ -7,7 +7,10 @@ export class UsersRepository {
   constructor(private readonly database: Database) {}
 
   async getAll() {
-    return this.database.selectFrom('users').selectAll().execute();
+    return this.database
+      .selectFrom('users')
+      .select(['id', 'email', 'name'])
+      .execute();
   }
 
   async getOneWithId(id: number) {

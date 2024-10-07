@@ -5,10 +5,12 @@ import { UsersModule } from '../users/users.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { validate } from '../../utils/env.validation';
 import { DatabaseModule } from '../../database/database.module';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
   imports: [
     UsersModule,
+    AuthModule,
     ConfigModule.forRoot({ validate }),
     DatabaseModule.forRootAsync({
       imports: [ConfigModule],

@@ -3,6 +3,7 @@ import { LocalAuthGuard } from './passport-local.guard';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from '../users/users.dto';
 import { Public } from './auth-public.decorator';
+import { JwtRefreshAuthGuard } from './passport-jwt-refresh.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -22,5 +23,12 @@ export class AuthController {
     return {
       data: response,
     };
+  }
+
+  @Public()
+  @UseGuards(JwtRefreshAuthGuard)
+  @Post('refresh')
+  async refreshToken(@Request() req) {
+    return this.authService.refreshToken(req.user);
   }
 }

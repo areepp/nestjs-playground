@@ -1,4 +1,12 @@
-import { Controller, Request, Post, UseGuards, Body } from '@nestjs/common';
+import {
+  Controller,
+  Request,
+  Post,
+  UseGuards,
+  Body,
+  Res,
+} from '@nestjs/common';
+import { Response } from 'express';
 import { LocalAuthGuard } from './passport-local.guard';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from '../users/users.dto';
@@ -12,8 +20,19 @@ export class AuthController {
   @Public()
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(@Request() req) {
-    return this.authService.login(req.user);
+  async login(@Request() req, @Res({ passthrough: true }) res: Response) {
+    const tokens = await this.authService.login(req.user);
+
+    res.cookie('refreshToken', tokens.refresh_token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'strict',
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    });
+
+    return {
+      access_token: tokens.access_token,
+    };
   }
 
   @Public()

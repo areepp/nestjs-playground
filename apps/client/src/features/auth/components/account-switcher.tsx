@@ -20,7 +20,7 @@ export function AccountSwitcher({
       <DropdownMenuTrigger asChild>
         <div
           className={cn(
-            "flex cursor-default items-center rounded-full p-3 transition-colors hover:bg-zinc-200 focus-visible:outline-none dark:hover:bg-zinc-800",
+            "flex cursor-default items-center rounded-lg p-3 transition-colors hover:bg-zinc-200 focus-visible:outline-none dark:hover:bg-zinc-800",
             isCollapsed ? "justify-center" : "justify-between",
           )}
         >

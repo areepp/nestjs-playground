@@ -4,6 +4,7 @@ import "./globals.css";
 import LayoutMenu from "../components/layout-menu";
 import { ThemeProvider } from "@/components/theme-provider";
 import { DarkModeToggle } from "@/components/dark-mode-toggle";
+import Providers from "./provider";
 
 const geistSans = localFont({
   src: "../../public/fonts/GeistVF.woff",
@@ -37,12 +38,14 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <LayoutMenu>
-            <div className="fixed right-3 top-3">
-              <DarkModeToggle />
-            </div>
-            <main className="p-3">{children}</main>
-          </LayoutMenu>
+          <Providers>
+            <LayoutMenu>
+              <div className="fixed right-3 top-3">
+                <DarkModeToggle />
+              </div>
+              <main className="p-3">{children}</main>
+            </LayoutMenu>
+          </Providers>
         </ThemeProvider>
       </body>
     </html>

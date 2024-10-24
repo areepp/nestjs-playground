@@ -1,6 +1,6 @@
 "use client";
 
-import { Notifications } from "@/components/notifications";
+import { Toaster } from "@/components/ui/toast";
 import {
   isServer,
   QueryClient,
@@ -44,7 +44,7 @@ export default function Providers({
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Notifications />
+      <Toaster />
       {children}
     </QueryClientProvider>
   );

@@ -18,24 +18,19 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import Link from "next/link";
-import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-const schemaLogin = z.object({
-  email: z.string().email(),
-  password: z.string(),
-});
-
-type SchemaLogin = z.infer<typeof schemaLogin>;
+import { schemaLogin, SchemaLogin, useLogin } from "../api/login";
 
 export default function LoginPage() {
   const form = useForm<SchemaLogin>({
     resolver: zodResolver(schemaLogin),
   });
 
+  const { mutate } = useLogin({});
+
   function onSubmit(values: SchemaLogin) {
-    console.log(values);
+    mutate(values);
   }
 
   return (

@@ -21,30 +21,29 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
-
-const schemaRegister = z
-  .object({
-    email: z.string().email(),
-    password: z
-      .string()
-      .min(7, { message: "Must be at least 7 characters long" })
-      .regex(/\d/, { message: "Must contain at least one number" }),
-    confirmPassword: z.string(),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match",
-    path: ["confirmPassword"],
-  });
-type SchemaRegister = z.infer<typeof schemaRegister>;
+import { SchemaRegister, schemaRegister, useRegister } from "../api/register";
 
 export default function CreateAccountPage() {
   const form = useForm<SchemaRegister>({
     resolver: zodResolver(schemaRegister),
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
+  });
+
+  const { mutate } = useRegister({
+    mutationConfig: {
+      onSuccess: () => {
+        form.reset();
+      },
+    },
   });
 
   function onSubmit(values: SchemaRegister) {
-    console.log(values);
+    mutate(values);
   }
 
   return (
@@ -77,6 +76,23 @@ export default function CreateAccountPage() {
           </div>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Name</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        type="name"
+                        placeholder="enter your name"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <FormField
                 control={form.control}
                 name="email"
@@ -114,11 +130,7 @@ export default function CreateAccountPage() {
                   <FormItem>
                     <FormLabel>Confirm your password</FormLabel>
                     <FormControl>
-                      <Input
-                        {...field}
-                        type="password"
-                        placeholder="m@example.com"
-                      />
+                      <Input {...field} type="password" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

@@ -21,12 +21,13 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     email: string,
     password: string,
   ): Promise<any> {
-    const contextId = ContextIdFactory.getByRequest(request);
-    const authService = await this.moduleRef.resolve(AuthService, contextId);
-    const user = await authService.validateUser(email, password);
-    if (!user) {
-      throw new UnauthorizedException();
+    try {
+      const contextId = ContextIdFactory.getByRequest(request);
+      const authService = await this.moduleRef.resolve(AuthService, contextId);
+      const user = await authService.validateUser(email, password);
+      return user;
+    } catch {
+      throw new UnauthorizedException('Invalid email or password');
     }
-    return user;
   }
 }

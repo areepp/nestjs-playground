@@ -14,17 +14,19 @@ export class AuthService {
   ) {}
 
   async validateUser(email: string, pass: string): Promise<any> {
-    const user = await this.usersService.findUserByEmail(email);
+    try {
+      const user = await this.usersService.findUserByEmail(email);
 
-    if (!user) throw new NotFoundException('user not found');
-
-    const isPasswordValid = await bcrypt.compare(pass, user.password);
-    if (isPasswordValid) {
-      const { password, ...res } = user;
-      return res;
+      const isPasswordValid = await bcrypt.compare(pass, user.password);
+      if (isPasswordValid) {
+        const { password, ...res } = user;
+        return res;
+      } else {
+        throw new NotFoundException('Invalid email or password');
+      }
+    } catch {
+      throw new NotFoundException('Invalid email or password');
     }
-
-    return null;
   }
 
   async login(user: { email: string; id: string }) {

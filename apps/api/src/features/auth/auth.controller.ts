@@ -1,11 +1,18 @@
 import { Controller, Post, UseGuards, Body, Res } from '@nestjs/common';
-import { Response } from 'express';
+import { CookieOptions, Response } from 'express';
 import { LocalAuthGuard } from './passport-local.guard';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from '../users/users.dto';
 import { Public } from './auth-public.decorator';
 import { JwtRefreshAuthGuard } from './passport-jwt-refresh.guard';
 import { User } from '../auth/auth.user.decorator';
+
+const REFRESH_TOKEN_OPTIONS: CookieOptions = {
+  httpOnly: true,
+  secure: true,
+  sameSite: 'strict',
+  maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+};
 
 @Controller('auth')
 export class AuthController {
@@ -17,12 +24,7 @@ export class AuthController {
   async login(@User() user, @Res({ passthrough: true }) res: Response) {
     const tokens = await this.authService.login(user);
 
-    res.cookie('refreshToken', tokens.refresh_token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'strict',
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-    });
+    res.cookie('refreshToken', tokens.refresh_token, REFRESH_TOKEN_OPTIONS);
 
     return {
       access_token: tokens.access_token,
@@ -43,5 +45,13 @@ export class AuthController {
   @Post('refresh')
   async refreshToken(@User() user) {
     return this.authService.refreshToken(user);
+  }
+
+  @Post('logout')
+  async logout(@Res({ passthrough: true }) res: Response) {
+    res.clearCookie('refreshToken', REFRESH_TOKEN_OPTIONS);
+    return {
+      message: 'logout successful',
+    };
   }
 }

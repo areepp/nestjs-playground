@@ -5,7 +5,7 @@ type State = {
 };
 
 type Action = {
-  updateAccessToken: (token: string) => void;
+  updateAccessToken: (token: string | null) => void;
 };
 
 export const useTokenStore = create<State & Action>((set) => ({

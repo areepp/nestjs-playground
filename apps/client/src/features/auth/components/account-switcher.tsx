@@ -10,12 +10,26 @@ import { useGetMyProfile } from "@/features/profile/api/get-my-profile";
 import { cn } from "@/lib/cn";
 import { ChevronsUpDown, User } from "lucide-react";
 import { useState } from "react";
+import { useLogout } from "../api/logout";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export function AccountSwitcher({
   isCollapsed,
 }: Readonly<{ isCollapsed: boolean }>) {
   const [showStatusBar, setShowStatusBar] = useState(true);
-  const { data } = useGetMyProfile({});
+  const { data, isError } = useGetMyProfile({});
+  const { mutate: logoutMutation } = useLogout({});
+
+  if (isError) {
+    // user is not logged in
+
+    return (
+      <Button>
+        <Link href="/auth/login">You are not logged in</Link>
+      </Button>
+    );
+  }
 
   return (
     <DropdownMenu>
@@ -40,7 +54,9 @@ export function AccountSwitcher({
         >
           {data?.name}
         </DropdownMenuCheckboxItem>
-        <DropdownMenuCheckboxItem disabled>Log out</DropdownMenuCheckboxItem>
+        <DropdownMenuCheckboxItem onClick={() => logoutMutation(undefined)}>
+          Log out
+        </DropdownMenuCheckboxItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

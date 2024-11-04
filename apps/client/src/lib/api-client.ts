@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useTokenStore } from "@/features/auth/hooks/use-token-store";
-import { NextResponse } from "next/server";
 import { toast } from "sonner";
 
 type RequestOptions = {
@@ -67,15 +66,21 @@ async function fetchApi<T>(
 
   if (response.status === 401) {
     // refreshing access token
-    const refreshResponse = await api.post<{ access_token: string }>(
-      "/auth/refresh",
-    );
+    const refreshResponse = await fetch("/api/auth/refresh", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        credentials: "include",
+      },
+    });
+    const refreshData: { access_token: string } = await refreshResponse.json();
 
-    if (refreshResponse.access_token) {
-      useTokenStore.getState().updateAccessToken(refreshResponse.access_token);
+    if (refreshData.access_token) {
+      useTokenStore.getState().updateAccessToken(refreshData.access_token);
       response = await doFetch();
     } else {
-      NextResponse.redirect("/auth/login");
+      throw new Error("unauthorized");
     }
   }
 

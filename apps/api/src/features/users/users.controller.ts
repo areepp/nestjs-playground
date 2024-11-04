@@ -24,7 +24,7 @@ export class UsersController {
   async findMyUserDetail(@User() user) {
     try {
       const data = await this.usersService.findUserById(user.id);
-      return { data };
+      return data;
     } catch {
       throw new NotFoundException();
     }
@@ -34,9 +34,7 @@ export class UsersController {
   async findUser(@Param('id', ParseIntPipe) id: string) {
     try {
       const data = await this.usersService.findUserById(Number(id));
-      return {
-        data,
-      };
+      return data;
     } catch {
       throw new NotFoundException();
     }

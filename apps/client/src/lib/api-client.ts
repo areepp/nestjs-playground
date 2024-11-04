@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { useTokenStore } from "@/features/auth/hooks/use-token-store";
+import { NextResponse } from "next/server";
 import { toast } from "sonner";
 
 type RequestOptions = {
@@ -43,19 +45,39 @@ async function fetchApi<T>(
   } = options;
   const fullUrl = buildUrlWithParams(`${"/api"}${url}`, params);
 
-  const response = await fetch(fullUrl, {
-    method,
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-      ...headers,
-      ...(cookie ? { Cookie: cookie } : {}),
-    },
-    body: body ? JSON.stringify(body) : undefined,
-    credentials: "include",
-    cache,
-    next,
-  });
+  const doFetch = () => {
+    const accessToken = useTokenStore.getState().accessToken;
+    return fetch(fullUrl, {
+      method,
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+        ...headers,
+        ...(cookie ? { Cookie: cookie } : {}),
+      },
+      body: body ? JSON.stringify(body) : undefined,
+      credentials: "include",
+      cache,
+      next,
+    });
+  };
+
+  let response = await doFetch();
+
+  if (response.status === 401) {
+    // refreshing access token
+    const refreshResponse = await api.post<{ access_token: string }>(
+      "/auth/refresh",
+    );
+
+    if (refreshResponse.access_token) {
+      useTokenStore.getState().updateAccessToken(refreshResponse.access_token);
+      response = await doFetch();
+    } else {
+      NextResponse.redirect("/auth/login");
+    }
+  }
 
   if (!response.ok) {
     const message = (await response.json()).message || response.statusText;

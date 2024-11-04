@@ -6,6 +6,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useGetMyProfile } from "@/features/profile/api/get-my-profile";
 import { cn } from "@/lib/cn";
 import { ChevronsUpDown, User } from "lucide-react";
 import { useState } from "react";
@@ -14,6 +15,7 @@ export function AccountSwitcher({
   isCollapsed,
 }: Readonly<{ isCollapsed: boolean }>) {
   const [showStatusBar, setShowStatusBar] = useState(true);
+  const { data } = useGetMyProfile({});
 
   return (
     <DropdownMenu>
@@ -26,7 +28,7 @@ export function AccountSwitcher({
         >
           <div className="flex items-center gap-3">
             <User />
-            {!isCollapsed && <span className="text-sm">John Doe</span>}
+            {!isCollapsed && <span className="text-sm">{data?.name}</span>}
           </div>
           {!isCollapsed && <ChevronsUpDown width={16} height={16} />}
         </div>
@@ -36,7 +38,7 @@ export function AccountSwitcher({
           checked={showStatusBar}
           onCheckedChange={setShowStatusBar}
         >
-          John Doe
+          {data?.name}
         </DropdownMenuCheckboxItem>
         <DropdownMenuCheckboxItem disabled>Log out</DropdownMenuCheckboxItem>
       </DropdownMenuContent>

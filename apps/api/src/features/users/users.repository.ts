@@ -16,7 +16,7 @@ export class UsersRepository {
   async getOneWithId(id: number) {
     return this.database
       .selectFrom('users')
-      .selectAll()
+      .select(['id', 'email', 'name'])
       .where('id', '=', id)
       .executeTakeFirst();
   }

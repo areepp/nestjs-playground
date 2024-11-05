@@ -10,35 +10,43 @@ import { AccountSwitcher } from "@/features/auth/components/account-switcher";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 import { useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { buttonVariants } from "./ui/button";
 import { cn } from "@/lib/cn";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
+import { useActivePath } from "@/hooks/useActivePath";
+import { useGetMyProfile } from "@/features/profile/api/get-my-profile";
 
-const NAV_LINKS: {
+type TNavLink = {
   title: string;
   iconNumber: string;
   href: string;
-}[] = [
+  isProtected: boolean;
+};
+
+const NAV_LINKS: TNavLink[] = [
   {
     title: "Intro",
     iconNumber: "0",
     href: "/",
+    isProtected: false,
   },
   {
     title: "Auth",
     iconNumber: "1",
     href: "/auth",
+    isProtected: false,
   },
   {
     title: "Basic CRUD",
     iconNumber: "2",
     href: "/posts",
+    isProtected: true,
   },
 ];
 
 const NavLinks = ({ isCollapsed }: { isCollapsed: boolean }) => {
-  const pathname = usePathname();
+  const { isError: isNotLoggedIn } = useGetMyProfile({});
+  const checkActivePath = useActivePath();
 
   return (
     <TooltipProvider delayDuration={0}>
@@ -54,12 +62,14 @@ const NavLinks = ({ isCollapsed }: { isCollapsed: boolean }) => {
                   <Link
                     href={link.href}
                     className={cn(
+                      "mx-auto h-9 w-9",
                       buttonVariants({
-                        variant: pathname === link.href ? "default" : "ghost",
+                        variant: checkActivePath(link.href)
+                          ? "default"
+                          : "ghost",
                         size: "icon",
                       }),
-                      "mx-auto h-9 w-9",
-                      pathname === link.href &&
+                      checkActivePath(link.href) &&
                         "dark:bg-muted dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-white",
                     )}
                   >
@@ -77,14 +87,17 @@ const NavLinks = ({ isCollapsed }: { isCollapsed: boolean }) => {
             ) : (
               <Link
                 key={index}
-                href={link.href}
+                href={isNotLoggedIn && link.isProtected ? "#" : link.href}
                 className={cn(
                   buttonVariants({
-                    variant: pathname === link.href ? "default" : "ghost",
+                    variant: checkActivePath(link.href) ? "default" : "ghost",
                   }),
-                  pathname === link.href &&
+                  checkActivePath(link.href) &&
                     "dark:bg-muted dark:text-white dark:hover:bg-muted dark:hover:text-white",
                   "flex w-full items-center justify-start gap-3",
+                  isNotLoggedIn &&
+                    link.isProtected &&
+                    "cursor-not-allowed opacity-50",
                 )}
               >
                 <span className="text-lg font-bold">{link.iconNumber}</span>

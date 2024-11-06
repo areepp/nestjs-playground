@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useTokenStore } from "@/features/auth/hooks/use-token-store";
 import { toast } from "sonner";
+import { API_ENDPOINT } from "./constants";
 
 type RequestOptions = {
   method?: string;
@@ -42,7 +43,7 @@ async function fetchApi<T>(
     cache = "no-store",
     next,
   } = options;
-  const fullUrl = buildUrlWithParams(`${"/api"}${url}`, params);
+  const fullUrl = buildUrlWithParams(`${API_ENDPOINT}${"/api"}${url}`, params);
 
   const doFetch = () => {
     const accessToken = useTokenStore.getState().accessToken;
@@ -66,13 +67,13 @@ async function fetchApi<T>(
 
   if (response.status === 401) {
     // refreshing access token
-    const refreshResponse = await fetch("/api/auth/refresh", {
+    const refreshResponse = await fetch(`${API_ENDPOINT}/api/auth/refresh`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
-        credentials: "include",
       },
+      credentials: "include",
     });
     const refreshData: { access_token: string } = await refreshResponse.json();
 

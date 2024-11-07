@@ -1,20 +1,20 @@
 "use client";
 
+import { TooltipProvider } from "@radix-ui/react-tooltip";
 import { getCookie, setCookie } from "cookies-next";
+import Link from "next/link";
+import { useState } from "react";
+import { cn } from "@/lib/cn";
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import { AccountSwitcher } from "@/features/auth/components/account-switcher";
-import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
-import { useState } from "react";
-import Link from "next/link";
-import { buttonVariants } from "./ui/button";
-import { cn } from "@/lib/cn";
-import { TooltipProvider } from "@radix-ui/react-tooltip";
-import { useActivePath } from "@/hooks/useActivePath";
 import { useGetMyProfile } from "@/features/profile/api/get-my-profile";
+import { useActivePath } from "@/hooks/useActivePath";
+import { buttonVariants } from "./ui/button";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 type TNavLink = {
   title: string;

@@ -1,6 +1,6 @@
+import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import { API_ENDPOINT } from "./lib/constants";
-import { cookies } from "next/headers";
 
 export async function middleware(req: NextRequest) {
   const refreshResponse = await fetch(`${API_ENDPOINT}/api/auth/refresh`, {

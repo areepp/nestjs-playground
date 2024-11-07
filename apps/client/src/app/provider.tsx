@@ -1,13 +1,13 @@
 "use client";
 
-import { Toaster } from "@/components/ui/toast";
-import { queryConfig } from "@/lib/react-query";
 import {
   isServer,
   QueryClient,
   QueryClientProvider,
 } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { queryConfig } from "@/lib/react-query";
+import { Toaster } from "@/components/ui/toast";
 
 function makeQueryClient() {
   return new QueryClient({

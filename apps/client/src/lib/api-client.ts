@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useTokenStore } from "@/features/auth/hooks/use-token-store";
 import { toast } from "sonner";
+import { useTokenStore } from "@/features/auth/hooks/use-token-store";
 import { API_ENDPOINT } from "./constants";
 
 type RequestOptions = {

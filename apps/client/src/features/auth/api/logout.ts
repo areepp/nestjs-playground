@@ -1,9 +1,9 @@
-import { MutationConfig } from "@/lib/react-query";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
-import { useTokenStore } from "../hooks/use-token-store";
-import { api } from "@/lib/api-client";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { api } from "@/lib/api-client";
+import { MutationConfig } from "@/lib/react-query";
+import { useTokenStore } from "../hooks/use-token-store";
 
 const logout = () => api.post("/auth/logout");
 

@@ -1,5 +1,10 @@
 "use client";
 
+import { ChevronsUpDown, User } from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
+import { cn } from "@/lib/cn";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -7,12 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useGetMyProfile } from "@/features/profile/api/get-my-profile";
-import { cn } from "@/lib/cn";
-import { ChevronsUpDown, User } from "lucide-react";
-import { useState } from "react";
 import { useLogout } from "../api/logout";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
 
 export function AccountSwitcher({
   isCollapsed,

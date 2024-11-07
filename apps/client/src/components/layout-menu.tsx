@@ -2,6 +2,7 @@
 
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import { getCookie, setCookie } from "cookies-next";
+import { Route } from "next";
 import Link from "next/link";
 import { useState } from "react";
 import { cn } from "@/lib/cn";
@@ -19,7 +20,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 type TNavLink = {
   title: string;
   iconNumber: string;
-  href: string;
+  href: Route;
   isProtected: boolean;
 };
 

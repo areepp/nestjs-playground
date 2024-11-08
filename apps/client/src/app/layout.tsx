@@ -43,7 +43,7 @@ export default function RootLayout({
               <div className="fixed right-3 top-3">
                 <DarkModeToggle />
               </div>
-              <main className="p-3">{children}</main>
+              <main className="p-3 h-full">{children}</main>
             </LayoutMenu>
           </Providers>
         </ThemeProvider>

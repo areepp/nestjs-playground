@@ -34,7 +34,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="my-auto mt-48 flex flex-col items-center justify-center">
+    <div className="h-full flex flex-col items-center justify-center">
       <Card className="w-[500px]">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl">Log in to your account</CardTitle>

@@ -47,7 +47,7 @@ export default function CreateAccountPage() {
   }
 
   return (
-    <div className="my-auto mt-48 flex items-center justify-center">
+    <div className="h-full flex items-center justify-center">
       <Card className="w-[500px]">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl">Create an account</CardTitle>

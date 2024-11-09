@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import {
@@ -20,7 +20,11 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { EditProfilePictureDialog } from "./edit-profile-picture-dialog";
-import { SchemaEditProfile, schemaEditProfile } from "../../api/edit-profile";
+import {
+  SchemaEditProfile,
+  schemaEditProfile,
+  useUpdateProfile,
+} from "../../api/edit-profile";
 import { useGetMyProfile } from "../../api/get-my-profile";
 
 export function EditProfileDialog() {
@@ -28,7 +32,17 @@ export function EditProfileDialog() {
     resolver: zodResolver(schemaEditProfile),
   });
 
+  const [open, setOpen] = useState(false);
+
   const { data } = useGetMyProfile({});
+
+  const { mutate, isPending } = useUpdateProfile({
+    mutationConfig: {
+      onSuccess: () => {
+        setOpen(false);
+      },
+    },
+  });
 
   useEffect(() => {
     form.reset({ name: data?.name, profilePicture: null });
@@ -37,12 +51,11 @@ export function EditProfileDialog() {
   }, [data]);
 
   function onSubmit(data: SchemaEditProfile) {
-    console.log("halo", data);
-    console.log(form.getValues());
+    mutate({ name: data.name });
   }
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button>Edit profile</Button>
       </DialogTrigger>
@@ -71,7 +84,9 @@ export function EditProfileDialog() {
           </Form>
         </div>
         <DialogFooter>
-          <Button onClick={form.handleSubmit(onSubmit)}>Save changes</Button>
+          <Button onClick={form.handleSubmit(onSubmit)} isLoading={isPending}>
+            Save changes
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

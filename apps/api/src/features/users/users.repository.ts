@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Database } from 'src/database/database';
-import { CreateUserDto } from './users.dto';
+import { CreateUserDto, UpdateUserDto } from './users.dto';
 
 @Injectable()
 export class UsersRepository {
@@ -31,5 +31,13 @@ export class UsersRepository {
 
   async create(dto: CreateUserDto) {
     return this.database.insertInto('users').values(dto).execute();
+  }
+
+  async update(id: number, dto: UpdateUserDto) {
+    return this.database
+      .updateTable('users')
+      .set({ name: dto.name })
+      .where('id', '=', id)
+      .execute();
   }
 }

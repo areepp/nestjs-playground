@@ -1,10 +1,11 @@
 import * as bcrypt from 'bcrypt';
 import {
+  BadRequestException,
   ConflictException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { CreateUserDto } from './users.dto';
+import { CreateUserDto, UpdateUserDto } from './users.dto';
 import { User } from './users.model';
 import { UsersRepository } from './users.repository';
 
@@ -44,6 +45,15 @@ export class UsersService {
         throw new ConflictException('Email already exists');
       }
       throw new Error();
+    }
+  }
+
+  async update(id: number, dto: UpdateUserDto) {
+    try {
+      await this.usersRepository.update(id, dto);
+      return dto;
+    } catch {
+      throw new BadRequestException();
     }
   }
 }

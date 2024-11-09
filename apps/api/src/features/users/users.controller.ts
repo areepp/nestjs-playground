@@ -1,12 +1,15 @@
 import {
+  Body,
   Controller,
+  ForbiddenException,
   Get,
-  NotFoundException,
   Param,
   ParseIntPipe,
+  Patch,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { User } from '../auth/auth.user.decorator';
+import { UpdateUserDto } from './users.dto';
 
 @Controller('users')
 export class UsersController {
@@ -22,21 +25,22 @@ export class UsersController {
 
   @Get('me')
   async findMyUserDetail(@User() user) {
-    try {
-      const data = await this.usersService.findUserById(user.id);
-      return data;
-    } catch {
-      throw new NotFoundException();
-    }
+    return await this.usersService.findUserById(user.id);
   }
 
   @Get(':id')
-  async findUser(@Param('id', ParseIntPipe) id: string) {
-    try {
-      const data = await this.usersService.findUserById(Number(id));
-      return data;
-    } catch {
-      throw new NotFoundException();
-    }
+  async findUser(@Param('id', ParseIntPipe) id: number) {
+    return await this.usersService.findUserById(id);
+  }
+
+  @Patch(':id')
+  async editUser(
+    @Param('id', ParseIntPipe) id: number,
+    @User() user,
+    @Body() dto: UpdateUserDto,
+  ) {
+    if (id !== user.id) throw new ForbiddenException();
+
+    return await this.usersService.update(id, dto);
   }
 }

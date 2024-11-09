@@ -28,19 +28,13 @@ export class UsersController {
     return await this.usersService.findUserById(user.id);
   }
 
+  @Patch('me')
+  async editUser(@User() user, @Body() dto: UpdateUserDto) {
+    return await this.usersService.update(user.id, dto);
+  }
+
   @Get(':id')
   async findUser(@Param('id', ParseIntPipe) id: number) {
     return await this.usersService.findUserById(id);
-  }
-
-  @Patch(':id')
-  async editUser(
-    @Param('id', ParseIntPipe) id: number,
-    @User() user,
-    @Body() dto: UpdateUserDto,
-  ) {
-    if (id !== user.id) throw new ForbiddenException();
-
-    return await this.usersService.update(id, dto);
   }
 }

@@ -1,3 +1,5 @@
+import PageProfile from "@/features/profile/components/page-profile";
+
 export default function AuthPage() {
-  return <h1>This is the auth page</h1>;
+  return <PageProfile />;
 }

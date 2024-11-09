@@ -6,7 +6,7 @@ import { MutationConfig } from "@/lib/react-query";
 
 export const schemaRegister = z
   .object({
-    name: z.string().min(3, "Must be at least 3 characters long"),
+    name: z.string().min(1, "Must be at least 1 characters long"),
     email: z.string().email(),
     password: z
       .string()

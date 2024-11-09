@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/resizable";
 import { AccountSwitcher } from "@/features/auth/components/account-switcher";
 import { useGetMyProfile } from "@/features/profile/api/get-my-profile";
-import { useActivePath } from "@/hooks/useActivePath";
+import { useActivePath } from "@/hooks/use-active-paths";
 import { buttonVariants } from "./ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 

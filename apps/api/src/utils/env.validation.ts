@@ -35,6 +35,18 @@ class EnvironmentVariables {
 
   @IsString()
   JWT_REFRESH_SECRET: string;
+
+  @IsString()
+  AWS_S3_REGION: string;
+
+  @IsString()
+  AWS_S3_BUCKET_NAME: string;
+
+  @IsString()
+  AWS_ACCESS_KEY_ID: string;
+
+  @IsString()
+  AWS_SECRET_KEY: string;
 }
 
 export function validate(config: Record<string, unknown>) {

@@ -16,7 +16,7 @@ export class UsersRepository {
   async getOneWithId(id: number) {
     return this.database
       .selectFrom('users')
-      .select(['id', 'email', 'name'])
+      .select(['id', 'email', 'name', 'profile_picture'])
       .where('id', '=', id)
       .executeTakeFirst();
   }
@@ -33,10 +33,13 @@ export class UsersRepository {
     return this.database.insertInto('users').values(dto).execute();
   }
 
-  async update(id: number, dto: UpdateUserDto) {
+  async update(
+    id: number,
+    payload: UpdateUserDto & { fileUploadString?: string },
+  ) {
     return this.database
       .updateTable('users')
-      .set({ name: dto.name })
+      .set({ name: payload.name, profile_picture: payload.fileUploadString })
       .where('id', '=', id)
       .execute();
   }

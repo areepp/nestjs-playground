@@ -8,11 +8,15 @@ import {
 import { CreateUserDto, UpdateUserDto } from './users.dto';
 import { User } from './users.model';
 import { UsersRepository } from './users.repository';
+import { FileStorageService } from 'src/shared/file-upload/file-storage.service';
 
 @Injectable()
 export class UsersService {
   private readonly users: User[] = [];
-  constructor(private readonly usersRepository: UsersRepository) {}
+  constructor(
+    private readonly usersRepository: UsersRepository,
+    private readonly fileStorageService: FileStorageService,
+  ) {}
 
   async findAll() {
     return this.usersRepository.getAll();
@@ -48,11 +52,26 @@ export class UsersService {
     }
   }
 
-  async update(id: number, dto: UpdateUserDto) {
+  async update(
+    id: number,
+    payload: UpdateUserDto & { profilePictureFile?: Express.Multer.File },
+  ) {
     try {
-      await this.usersRepository.update(id, dto);
-      return dto;
-    } catch {
+      let s3Url: string | null = null;
+      if (payload.profilePictureFile) {
+        s3Url = await this.fileStorageService.upload(
+          payload.profilePictureFile.buffer,
+          `profile-pictures/${id}.png`,
+        );
+      }
+      await this.usersRepository.update(id, {
+        name: payload.name,
+        // added the v parameter so that next.js will serve the newest image instead of the cached image.
+        ...(s3Url ? { fileUploadString: `${s3Url}?v=${Date.now()}` } : {}),
+      });
+      return payload;
+    } catch (error) {
+      console.error('error', error);
       throw new BadRequestException();
     }
   }

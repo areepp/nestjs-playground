@@ -13,7 +13,7 @@ import { JwtAuthGuard } from '../auth/passport-jwt.guard';
   imports: [
     UsersModule,
     AuthModule,
-    ConfigModule.forRoot({ validate }),
+    ConfigModule.forRoot({ validate, isGlobal: true }),
     DatabaseModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

@@ -40,18 +40,23 @@ export function EditProfileDialog() {
     mutationConfig: {
       onSuccess: () => {
         setOpen(false);
+        form.reset();
       },
     },
   });
 
   useEffect(() => {
-    form.reset({ name: data?.name, profilePicture: null });
+    form.reset({
+      name: data?.name,
+      profilePicture: undefined,
+      initialProfilePicture: data?.profile_picture,
+    });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   function onSubmit(data: SchemaEditProfile) {
-    mutate({ name: data.name });
+    mutate({ name: data.name, profilePicture: data.profilePicture });
   }
 
   return (

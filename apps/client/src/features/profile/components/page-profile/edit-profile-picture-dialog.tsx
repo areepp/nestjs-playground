@@ -27,7 +27,7 @@ export function EditProfilePictureDialog() {
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
 
   const profilePictureValue = form.watch("profilePicture");
-  const { fileSrc } = useFilePreview(profilePictureValue);
+  const { fileSrc } = useFilePreview(profilePictureValue ?? null);
 
   function onCropComplete(_croppedArea: Area, croppedAreaPixels: Area) {
     setCroppedAreaPixels(croppedAreaPixels);
@@ -50,7 +50,11 @@ export function EditProfilePictureDialog() {
       <div className="relative w-28 h-28 rounded-full overflow-hidden mx-auto">
         <Image
           layout="fill"
-          src={fileSrc ?? "/default-profile-picture.jpg"}
+          src={
+            fileSrc ??
+            form.getValues("initialProfilePicture") ??
+            "/default-profile-picture.jpg"
+          }
           alt="profile picture"
         />
         <FormField

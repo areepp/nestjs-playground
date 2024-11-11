@@ -6,12 +6,27 @@ import { MutationConfig } from "@/lib/react-query";
 
 export const schemaEditProfile = z.object({
   name: z.string().min(1, "Must be at least 1 character long"),
-  profilePicture: z.instanceof(File).nullable(),
+  profilePicture: z.instanceof(File).optional(),
 });
-export type SchemaEditProfile = z.infer<typeof schemaEditProfile>;
+export type SchemaEditProfile = z.infer<typeof schemaEditProfile> & {
+  initialProfilePicture?: string | null;
+};
 
-const updateProfile = (data: Pick<SchemaEditProfile, "name">) =>
-  api.patch("/users/me", data);
+const updateProfile = (data: SchemaEditProfile) => {
+  const formData = new FormData();
+  if (data.name) {
+    formData.append("name", data.name);
+  }
+  if (data.profilePicture)
+    formData.append("profilePicture", data.profilePicture);
+
+  return api.patch("/users/me", formData, {
+    isJSON: false,
+    headers: {
+      Accept: "multipart/form-data",
+    },
+  });
+};
 
 export const useUpdateProfile = ({
   mutationConfig,

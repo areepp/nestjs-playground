@@ -11,6 +11,7 @@ type RequestOptions = {
   params?: Record<string, string | number | boolean | undefined | null>;
   cache?: RequestCache;
   next?: NextFetchRequestConfig;
+  isJSON?: boolean;
 };
 
 function buildUrlWithParams(
@@ -42,21 +43,31 @@ async function fetchApi<T>(
     params,
     cache = "no-store",
     next,
+    isJSON = true,
   } = options;
   const fullUrl = buildUrlWithParams(`${API_ENDPOINT}${"/api"}${url}`, params);
+
+  const parseBody = () => {
+    if (body) {
+      return isJSON ? JSON.stringify(body) : body;
+    }
+
+    return undefined;
+  };
 
   const doFetch = () => {
     const accessToken = useTokenStore.getState().accessToken;
     return fetch(fullUrl, {
       method,
       headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
+        ...(isJSON
+          ? { "Content-Type": "application/json", Accept: "application/json" }
+          : {}),
         ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
         ...headers,
         ...(cookie ? { Cookie: cookie } : {}),
       },
-      body: body ? JSON.stringify(body) : undefined,
+      body: parseBody(),
       credentials: "include",
       cache,
       next,

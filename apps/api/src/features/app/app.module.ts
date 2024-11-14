@@ -8,9 +8,11 @@ import { DatabaseModule } from '../../database/database.module';
 import { AuthModule } from '../auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from '../auth/passport-jwt.guard';
+import { PostsModule } from '../posts/posts.module';
 
 @Module({
   imports: [
+    PostsModule,
     UsersModule,
     AuthModule,
     ConfigModule.forRoot({ validate, isGlobal: true }),

@@ -1,4 +1,4 @@
-import { Generated, Insertable, Selectable } from 'kysely';
+import { Generated, Selectable } from 'kysely';
 
 export interface UsersTable {
   id: Generated<number>;
@@ -9,4 +9,3 @@ export interface UsersTable {
 }
 
 export type User = Selectable<UsersTable>;
-export type NewUser = Insertable<UsersTable>;

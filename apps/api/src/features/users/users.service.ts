@@ -1,18 +1,16 @@
 import * as bcrypt from 'bcrypt';
 import {
-  BadRequestException,
   ConflictException,
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { CreateUserDto, UpdateUserDto } from './users.dto';
-import { User } from './users.model';
 import { UsersRepository } from './users.repository';
 import { FileStorageService } from 'src/shared/file-upload/file-storage.service';
 
 @Injectable()
 export class UsersService {
-  private readonly users: User[] = [];
   constructor(
     private readonly usersRepository: UsersRepository,
     private readonly fileStorageService: FileStorageService,
@@ -72,7 +70,7 @@ export class UsersService {
       return payload;
     } catch (error) {
       console.error('error', error);
-      throw new BadRequestException();
+      throw new InternalServerErrorException('User update failed');
     }
   }
 }

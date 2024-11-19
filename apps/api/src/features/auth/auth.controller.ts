@@ -6,6 +6,7 @@ import { CreateUserDto } from '../users/users.dto';
 import { Public } from './auth-public.decorator';
 import { JwtRefreshAuthGuard } from './passport-jwt-refresh.guard';
 import { User } from '../auth/auth.user.decorator';
+import { MessageResponse } from 'src/utils/common-types';
 
 const REFRESH_TOKEN_OPTIONS: CookieOptions = {
   httpOnly: true,
@@ -48,7 +49,9 @@ export class AuthController {
   }
 
   @Post('logout')
-  async logout(@Res({ passthrough: true }) res: Response) {
+  async logout(
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<MessageResponse> {
     res.clearCookie('refreshToken', REFRESH_TOKEN_OPTIONS);
     return {
       message: 'logout successful',

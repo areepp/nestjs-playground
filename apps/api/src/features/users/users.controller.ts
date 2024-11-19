@@ -7,6 +7,7 @@ import {
   ParseFilePipe,
   ParseIntPipe,
   Patch,
+  Query,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
@@ -14,10 +15,17 @@ import { UsersService } from './users.service';
 import { User } from '../auth/auth.user.decorator';
 import { UpdateUserDto } from './users.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { PaginatedResponse } from 'src/utils/common-types';
+import { Post } from '../posts/posts.model';
+import { PostsService } from '../posts/posts.service';
+import { PaginationParams } from 'src/utils/dto';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly postsService: PostsService,
+  ) {}
 
   @Get()
   async findAll() {
@@ -30,6 +38,14 @@ export class UsersController {
   @Get('me')
   async findMyUserDetail(@User() user) {
     return await this.usersService.findUserById(user.id);
+  }
+
+  @Get('me/posts')
+  async getMyPost(
+    @User() user,
+    @Query() params: PaginationParams,
+  ): Promise<PaginatedResponse<Post>> {
+    return await this.postsService.getAll({ userId: user.id, params });
   }
 
   @Patch('me')

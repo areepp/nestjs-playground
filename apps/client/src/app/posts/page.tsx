@@ -1,3 +1,10 @@
+import NewPostForm from "@/features/posts/components/new-post-form";
+
 export default function PostsPage() {
-  return <h1>This is the posts page</h1>;
+  return (
+    <div>
+      <h1 className="font-bold">Posts</h1>
+      <NewPostForm className="my-6" />
+    </div>
+  );
 }

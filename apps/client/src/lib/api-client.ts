@@ -91,8 +91,6 @@ async function fetchApi<T>(
     if (refreshData.access_token) {
       useTokenStore.getState().updateAccessToken(refreshData.access_token);
       response = await doFetch();
-    } else {
-      throw new Error("unauthorized");
     }
   }
 

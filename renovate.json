@@ -4,5 +4,8 @@
     "config:recommended"
   ],
   "timezone": "Asia/Jakarta",
-  "schedule": [* * * * 0,6]
+  "schedule": [
+    "* * * * 0,6"
+  ],
+  "description": "Schedule once a week on the weekends."
 }

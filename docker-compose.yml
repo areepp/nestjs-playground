@@ -13,7 +13,7 @@ services:
 
   pgadmin:
     container_name: nestjs-kysely-pgadmin
-    image: dpage/pgadmin4:7.5
+    image: dpage/pgadmin4:7.8
     networks:
       - postgres
     ports:

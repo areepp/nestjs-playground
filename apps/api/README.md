@@ -29,9 +29,8 @@
 ## Project setup
 
 ```bash
-create .docker.env
 create .env
-(refer to the .env.example and docker.env.example files)
+(refer to the .env.example file)
 
 $ yarn install
 $ docker compose up

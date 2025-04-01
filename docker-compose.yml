@@ -9,7 +9,7 @@ services:
     volumes:
       - /data/postgres:/data/postgres
     env_file:
-      - docker.env
+      - ./apps/api/.env
 
   pgadmin:
     container_name: nestjs-kysely-pgadmin
@@ -21,7 +21,7 @@ services:
     volumes:
       - /data/pgadmin:/root/.pgadmin
     env_file:
-      - docker.env
+      - ./apps/api/.env
 
 networks:
   postgres:

@@ -40,7 +40,7 @@ export class PostsRepository {
         meta: {
           current_page: page,
           per_page: per_page,
-          total_count: count as number,
+          total_count: Number(count),
           total_pages: Math.ceil((count as number) / per_page),
         },
       };

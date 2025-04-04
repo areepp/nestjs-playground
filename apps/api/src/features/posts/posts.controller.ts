@@ -7,6 +7,8 @@ import {
   ParseIntPipe,
   Post,
   Query,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { User } from '../auth/auth.user.decorator';
@@ -20,6 +22,7 @@ export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
   @Get()
+  @UsePipes(new ValidationPipe({ transform: true }))
   async getAll(
     @Query() params: PaginationParams,
   ): Promise<PaginatedResponse<TPost>> {

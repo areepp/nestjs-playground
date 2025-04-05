@@ -1,6 +1,7 @@
 "use client";
 
 import { ChevronsUpDown, User } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { cn } from "@/lib/cn";
@@ -41,7 +42,13 @@ export function AccountSwitcher({
           )}
         >
           <div className="flex items-center gap-3">
-            <User />
+            <div className="relative h-8 w-8 overflow-hidden rounded-full">
+              <Image
+                src={data?.profile_picture ?? "/default-profile-picture.jpg"}
+                alt="profile picture"
+                fill
+              />
+            </div>
             {!isCollapsed && <span className="text-sm">{data?.name}</span>}
           </div>
           {!isCollapsed && <ChevronsUpDown width={16} height={16} />}

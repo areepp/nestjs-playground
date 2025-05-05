@@ -122,3 +122,18 @@ export const api = {
     return fetchApi<T>(url, { ...options, method: "DELETE" });
   },
 };
+
+export type ApiResponseWithPagination<T> = {
+  data: T[];
+  meta: {
+    current_page: number;
+    per_page: number;
+    total_count: number;
+    total_pages: number;
+  };
+};
+
+export type PaginationParams = {
+  page: number;
+  per_page: number;
+};

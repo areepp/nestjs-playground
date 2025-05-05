@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreatePostDto } from './posts.dto';
 import { Database } from 'src/database/database';
 import { PaginationParams } from 'src/utils/dto';
+import { jsonArrayFrom, jsonObjectFrom } from 'kysely/helpers/postgres';
 
 @Injectable()
 export class PostsRepository {
@@ -17,7 +18,15 @@ export class PostsRepository {
     return this.database.transaction().execute(async (transaction) => {
       let postsQuery = transaction
         .selectFrom('posts')
-        .selectAll()
+        .selectAll('posts')
+        .select((eb) => [
+          jsonObjectFrom(
+            eb
+              .selectFrom('users')
+              .select(['name', 'id', 'profile_picture'])
+              .whereRef('users.id', '=', 'posts.user_id'),
+          ).as('user'),
+        ])
         .orderBy('created_at', 'desc')
         .offset((page - 1) * per_page)
         .limit(per_page);

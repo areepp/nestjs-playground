@@ -1,7 +1,7 @@
 services:
   postgres:
     container_name: nestjs-playground-postgres
-    image: postgres:15.12
+    image: postgres:17.5
     ports:
       - '5432:5432'
     networks:

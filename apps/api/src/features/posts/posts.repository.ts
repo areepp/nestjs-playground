@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreatePostDto } from './posts.dto';
 import { Database } from 'src/database/database';
 import { PaginationParams } from 'src/utils/dto';
-import { jsonArrayFrom, jsonObjectFrom } from 'kysely/helpers/postgres';
+import { jsonObjectFrom } from 'kysely/helpers/postgres';
 
 @Injectable()
 export class PostsRepository {

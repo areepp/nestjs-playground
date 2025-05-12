@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PostsRepository } from './posts.repository';
 import { CreatePostDto } from './posts.dto';
-import { PaginationParams } from 'src/utils/dto';
+import { InfinitePaginationParams } from 'src/utils/dto';
 
 @Injectable()
 export class PostsService {
@@ -12,7 +12,7 @@ export class PostsService {
     params,
   }: {
     userId?: number;
-    params?: PaginationParams;
+    params?: InfinitePaginationParams;
   }) {
     return this.postsRepository.getAll({ userId, params });
   }

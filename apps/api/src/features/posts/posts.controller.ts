@@ -13,8 +13,11 @@ import {
 import { PostsService } from './posts.service';
 import { User } from '../auth/auth.user.decorator';
 import { CreatePostDto } from './posts.dto';
-import { PaginationParams } from 'src/utils/dto';
-import { MessageResponse, PaginatedResponse } from 'src/utils/common-types';
+import { InfinitePaginationParams } from 'src/utils/dto';
+import {
+  MessageResponse,
+  InfinitePaginatedResponse,
+} from 'src/utils/common-types';
 import { Post as TPost } from './posts.model';
 
 @Controller('posts')
@@ -24,8 +27,8 @@ export class PostsController {
   @Get()
   @UsePipes(new ValidationPipe({ transform: true }))
   async getAll(
-    @Query() params: PaginationParams,
-  ): Promise<PaginatedResponse<TPost>> {
+    @Query() params: InfinitePaginationParams,
+  ): Promise<InfinitePaginatedResponse<TPost>> {
     return this.postsService.getAll({ params });
   }
 

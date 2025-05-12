@@ -1,13 +1,11 @@
-interface PaginationMeta {
-  current_page: number;
-  per_page: number;
-  total_count: number;
-  total_pages: number;
+interface InfinitePaginationMeta {
+  nextCursor: number;
+  hasNextPage: boolean;
 }
 
-export interface PaginatedResponse<T> {
+export interface InfinitePaginatedResponse<T> {
   data: T[];
-  meta: PaginationMeta;
+  meta: InfinitePaginationMeta;
 }
 
 export interface MessageResponse {

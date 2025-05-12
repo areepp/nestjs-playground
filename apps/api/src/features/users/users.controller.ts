@@ -15,10 +15,10 @@ import { UsersService } from './users.service';
 import { User } from '../auth/auth.user.decorator';
 import { UpdateUserDto } from './users.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { PaginatedResponse } from 'src/utils/common-types';
+import { InfinitePaginatedResponse } from 'src/utils/common-types';
 import { Post } from '../posts/posts.model';
 import { PostsService } from '../posts/posts.service';
-import { PaginationParams } from 'src/utils/dto';
+import { InfinitePaginationParams } from 'src/utils/dto';
 
 @Controller('users')
 export class UsersController {
@@ -43,8 +43,8 @@ export class UsersController {
   @Get('me/posts')
   async getMyPost(
     @User() user,
-    @Query() params: PaginationParams,
-  ): Promise<PaginatedResponse<Post>> {
+    @Query() params: InfinitePaginationParams,
+  ): Promise<InfinitePaginatedResponse<Post>> {
     return await this.postsService.getAll({ userId: user.id, params });
   }
 

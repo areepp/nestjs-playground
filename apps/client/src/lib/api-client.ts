@@ -123,17 +123,15 @@ export const api = {
   },
 };
 
-export type ApiResponseWithPagination<T> = {
+export type ApiResponseWithInfinitePagination<T> = {
   data: T[];
   meta: {
-    current_page: number;
-    per_page: number;
-    total_count: number;
-    total_pages: number;
+    nextCursor: number;
+    hasNextPage: boolean;
   };
 };
 
-export type PaginationParams = {
-  page: number;
-  per_page: number;
+export type InfinitePaginationParams = {
+  cursor: number;
+  limit: number;
 };

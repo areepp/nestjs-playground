@@ -11,7 +11,7 @@ export const useLogout = ({
   mutationConfig,
 }: {
   mutationConfig?: MutationConfig<typeof logout>;
-}) => {
+} = {}) => {
   const { push } = useRouter();
   const queryClient = useQueryClient();
   const updateAccessToken = useTokenStore((state) => state.updateAccessToken);

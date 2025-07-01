@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePostDto } from './posts.dto';
 import { Database } from 'src/database/database';
-import { PaginationParams } from 'src/utils/dto';
+import { InfinitePaginationParams } from 'src/utils/dto';
+import { jsonObjectFrom } from 'kysely/helpers/postgres';
 
 @Injectable()
 export class PostsRepository {
@@ -9,39 +10,45 @@ export class PostsRepository {
 
   async getAll({
     userId,
-    params: { page = 1, per_page = 10 },
+    params: { cursor, limit = 10 },
   }: {
     userId?: number;
-    params?: PaginationParams;
+    params?: InfinitePaginationParams;
   }) {
     return this.database.transaction().execute(async (transaction) => {
       let postsQuery = transaction
         .selectFrom('posts')
-        .selectAll()
-        .orderBy('created_at', 'desc')
-        .offset((page - 1) * per_page)
-        .limit(per_page);
+        .selectAll('posts')
+        .select((eb) => [
+          jsonObjectFrom(
+            eb
+              .selectFrom('users')
+              .select(['name', 'id', 'profile_picture'])
+              .whereRef('users.id', '=', 'posts.user_id'),
+          ).as('user'),
+        ])
+        .orderBy('id', 'desc')
+        .limit(limit + 1); // fetch one extra to check for next page
 
-      if (userId) postsQuery = postsQuery.where('user_id', '=', userId);
+      if (userId) {
+        postsQuery = postsQuery.where('user_id', '=', userId);
+      }
+
+      if (cursor) {
+        postsQuery = postsQuery.where('id', '<', cursor); // use id as cursor
+      }
+
       const posts = await postsQuery.execute();
 
-      let countQuery = transaction
-        .selectFrom('posts')
-        .select((expressionBuilder) =>
-          expressionBuilder.fn.countAll().as('count'),
-        );
-
-      if (userId) countQuery = countQuery.where('user_id', '=', userId);
-
-      const { count } = await countQuery.executeTakeFirstOrThrow();
+      const hasNextPage = posts.length > limit;
+      const data = hasNextPage ? posts.slice(0, -1) : posts;
+      const nextCursor = hasNextPage ? data[data.length - 1].id : null;
 
       return {
-        data: posts,
+        data,
         meta: {
-          current_page: page,
-          per_page: per_page,
-          total_count: count as number,
-          total_pages: Math.ceil((count as number) / per_page),
+          nextCursor,
+          hasNextPage,
         },
       };
     });

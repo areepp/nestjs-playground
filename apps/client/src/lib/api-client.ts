@@ -122,3 +122,16 @@ export const api = {
     return fetchApi<T>(url, { ...options, method: "DELETE" });
   },
 };
+
+export type ApiResponseWithInfinitePagination<T> = {
+  data: T[];
+  meta: {
+    nextCursor: number;
+    hasNextPage: boolean;
+  };
+};
+
+export type InfinitePaginationParams = {
+  cursor: number;
+  limit: number;
+};

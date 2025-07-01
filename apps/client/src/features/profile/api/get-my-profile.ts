@@ -15,4 +15,4 @@ export const useGetMyProfile = ({
   queryConfig,
 }: {
   queryConfig?: QueryConfig<typeof getUsersQueryOptions>;
-}) => useQuery({ ...getUsersQueryOptions(), ...queryConfig });
+} = {}) => useQuery({ ...getUsersQueryOptions(), ...queryConfig });

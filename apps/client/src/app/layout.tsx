@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import { DarkModeToggle } from "@/components/dark-mode-toggle";
 import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 import Providers from "./provider";
@@ -30,7 +29,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} font-sans text-xl antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}
       >
         <ThemeProvider
           attribute="class"
@@ -39,14 +38,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <Providers>
-            <LayoutMenu>
-              <div className="fixed right-3 top-3">
-                <DarkModeToggle />
-              </div>
-              <main className="h-full container max-w-xl mx-auto py-6">
-                {children}
-              </main>
-            </LayoutMenu>
+            <LayoutMenu>{children}</LayoutMenu>
           </Providers>
         </ThemeProvider>
       </body>

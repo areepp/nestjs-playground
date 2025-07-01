@@ -9,12 +9,16 @@ import { AuthModule } from '../auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from '../auth/passport-jwt.guard';
 import { PostsModule } from '../posts/posts.module';
+import { SeedsModule } from 'src/shared/seed.module';
+import { CommandModule } from 'nestjs-command';
 
 @Module({
   imports: [
     PostsModule,
     UsersModule,
     AuthModule,
+    SeedsModule,
+    CommandModule,
     ConfigModule.forRoot({ validate, isGlobal: true }),
     DatabaseModule.forRootAsync({
       imports: [ConfigModule],

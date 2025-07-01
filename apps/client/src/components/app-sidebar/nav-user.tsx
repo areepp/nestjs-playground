@@ -49,7 +49,7 @@ export function NavUser() {
             >
               <Avatar className="h-8 w-8">
                 <AvatarImage
-                  src={data?.profile_picture ?? "/default-profile-picture.jpg"}
+                  src={data?.profile_picture ?? DEFAULT_PROFILE_PICTURE}
                   alt={data?.name}
                 />
                 <AvatarFallback className="rounded-lg">CN</AvatarFallback>

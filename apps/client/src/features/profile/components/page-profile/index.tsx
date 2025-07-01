@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { DEFAULT_PROFILE_PICTURE } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
 import { useLogout } from "@/features/auth/api/logout";
 import { EditProfileDialog } from "./edit-profile-dialog";
@@ -13,7 +14,7 @@ export default function PageProfile() {
   return (
     <div className="h-full flex flex-col items-center justify-center gap-9">
       <Image
-        src={data?.profile_picture ?? "/default-profile-picture.jpg"}
+        src={data?.profile_picture ?? DEFAULT_PROFILE_PICTURE}
         alt="profile picture"
         className="rounded-full shadow-lg dark:shadow-zinc-400"
         width={200}
@@ -24,6 +25,7 @@ export default function PageProfile() {
       <Button variant="secondary" onClick={() => logoutMutation(undefined)}>
         Log out
       </Button>
+      <div className="w-full h-20 bg-white rounded-xl" />
     </div>
   );
 }

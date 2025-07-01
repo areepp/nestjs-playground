@@ -1,6 +1,7 @@
 import { formatRelative } from "date-fns";
 import { MessageCircle, Heart } from "lucide-react";
 import Image from "next/image";
+import { DEFAULT_PROFILE_PICTURE } from "@/lib/constants";
 
 interface PostItemProps {
   username: string;
@@ -25,7 +26,7 @@ export function PostItem({
     <div className="flex gap-4 p-4 border-b border-white/10 last:border-b-0">
       <div className="h-10 w-10 rounded-full overflow-hidden relative">
         <Image
-          src={avatarUrl}
+          src={avatarUrl ?? DEFAULT_PROFILE_PICTURE}
           alt={`${username}'s avatar`}
           fill
           className="object-cover"

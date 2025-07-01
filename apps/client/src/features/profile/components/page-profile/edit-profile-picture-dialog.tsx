@@ -3,6 +3,7 @@ import Image from "next/image";
 import { useState } from "react";
 import Cropper, { Area } from "react-easy-crop";
 import { useFormContext } from "react-hook-form";
+import { DEFAULT_PROFILE_PICTURE } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -53,7 +54,7 @@ export function EditProfilePictureDialog() {
           src={
             fileSrc ??
             form.getValues("initialProfilePicture") ??
-            "/default-profile-picture.jpg"
+            DEFAULT_PROFILE_PICTURE
           }
           alt="profile picture"
         />
